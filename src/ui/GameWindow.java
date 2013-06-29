@@ -9,7 +9,6 @@ import javax.swing.JFrame;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
 
-import platform.EditTest;
 import ui.Controls.Input;
 
 public class GameWindow extends Component {

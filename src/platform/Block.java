@@ -11,7 +11,6 @@ import java.util.Arrays;
 import platform.layer.CollisionLayer;
 import platform.layer.Layer;
 import platform.layer.LayerID;
-import platform.layer.TileLayer;
 import editor.MapIconPanel.MapIcon;
 
 public class Block {

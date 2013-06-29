@@ -14,12 +14,12 @@ public final class Controls {
 	public Controls() {
 		// TODO: attempt to read from external ini.
 		// if not present, unpack default control file and read from that
-		String file = CONTROL_FILE;
+		String controlFile = CONTROL_FILE;
 		Scanner data = null;
 		try {
-			data = new Scanner(new File(CONTROL_FILE));
+			data = new Scanner(new File(controlFile));
 		} catch (FileNotFoundException e) {
-			ZettaUtil.error("Couldn't find control file " + CONTROL_FILE);
+			ZettaUtil.error("Couldn't find control file " + controlFile);
 		}
 		String next;
 		controlKeys = new String[Input.values().length];

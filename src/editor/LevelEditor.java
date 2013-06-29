@@ -366,7 +366,8 @@ public class LevelEditor extends JFrame {
 			case UP: this.setWorkingCoords(workingX, workingY-1); break;
 			case DOWN: this.setWorkingCoords(workingX, workingY+1); break;
 			case JUMP: ZettaUtil.log("Undo: " + undo + "\nRedo: " + redo +
-					"\nCurrent Tile Layer: " + currentLayer);
+					"\nCurrent Tile Layer: " + currentLayer); break;
+			case DEBUG: ZettaUtil.log("You hit the DEBUG key.");
 			break;
 			}
 		}
@@ -403,7 +404,7 @@ public class LevelEditor extends JFrame {
 	}
 	private void loadEditorData(String editorDataFile) {
 		int wx, wy;
-		RandomAccessFile f;
+		RandomAccessFile f = null;
 		try {
 			f = new RandomAccessFile(new File(editorDataFile), "r");
 		} catch (FileNotFoundException e1) {
@@ -419,6 +420,12 @@ public class LevelEditor extends JFrame {
 		} catch (IOException e) {
 			ZettaUtil.log("Invalid editor data-- reading first line failed");
 			this.newFile(false);
+			try {
+				f.close();
+			} catch (IOException e1) {
+				ZettaUtil.log("Closing the editor data file failed...? " +
+						"Something's gone terribly wrong...");
+			}
 			return;
 		}
 		wx = Integer.parseInt(line[0]);
@@ -426,6 +433,12 @@ public class LevelEditor extends JFrame {
 		filename = line[2];
 		this.openFile(new File(filename));
 		this.setWorkingCoords(wx, wy);
+		try {
+			f.close();
+		} catch (IOException e) {
+			ZettaUtil.log("Closing the editor data file failed... " +
+					"but we loaded from it, so we should be okay?");
+		}
 	}
 
 	private void resetEditor() {

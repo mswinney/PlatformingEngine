@@ -3,11 +3,6 @@ package platform;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import editor.MapIconPanel;
-import editor.MapIconPanel.MapIcon;
-import editor.MapIconPanel.MapIcon.DoorPosition;
-import editor.MapIconPanel.MapIcon.ScrollLock;
-
 public class Playground {
 	public static void main(String[] args) throws IOException, URISyntaxException {
 		/*MapIcon m = new MapIcon();

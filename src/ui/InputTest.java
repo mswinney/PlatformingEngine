@@ -3,10 +3,6 @@ package ui;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
 import platform.ZettaUtil;
 
 public class InputTest extends Game {

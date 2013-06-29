@@ -42,6 +42,7 @@ when Save As'd with a new name, update window title
   * finish scroll bars on palette
 add Properties menu with global door color RGB changes
 Remember window size and position on screen
+make Open... dialog / Save... dialog start at where the .exe is?
 
 two forms (machine and human?), two different mentors, each with very contradictory outlooks on the world they try to pass on to you
 

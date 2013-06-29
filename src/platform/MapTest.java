@@ -64,7 +64,8 @@ public class MapTest extends ui.Game {
 			case RIGHT: if (mapX < zone.getWidth() - 1) mapX++; break;
 			case UP: if (mapY > 0) mapY--; break;
 			case DOWN: if (mapY < zone.getHeight() - 1) mapY++; break;
-			case DEBUG: mode = MapMode.values()[(mode.ordinal()+1) % MapMode.values().length];
+			case DEBUG:
+			case JUMP: mode = MapMode.values()[(mode.ordinal()+1) % MapMode.values().length];
 				break;
 			}
 		}
