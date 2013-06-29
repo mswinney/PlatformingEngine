@@ -1,0 +1,25 @@
+File Header: Four byte version ID magic number. Two byte tile size of one block X, two bytes Y. Two byte map size X. Two byte map size Y.
+Map Data: Starting map X (two bytes). Starting map Y (two bytes).
+Block Data:
+  --Block Header
+    Two bytes map position X, two bytes map position Y.
+    Two bytes music index. Two bytes ambience index.
+  --Map Icon Data - same as v4 spec
+    Two bytes for room map icon index.
+	Two door bytes.
+		UL DR. 0: Nothing. 1: Standard door. 2: Red. 3: Green. 4: Blue. 5: Grey? 6-15: various header-defined colors (eventually).
+	One scroll byte.
+	Three bytes for room color.
+	Two bytes for markings on the room-- powerup present, Map Room icon, Ammo Refill icon, Save Room icon, etc.
+  --Layer Data
+    Two-byte Layer ID or control code, possibly with Layer Index followed by corresponding data
+	>> THESE CONSTANTS ARE OUTDATED, LOOK IN platform.layer.LayerID FOR THE ACTUAL ONES
+	* Indexed: 7D[ID] Decoration, 1D[ID] Image Decoration, CD[ID] Color Decoration
+	* Non-Indexed: 7CFF Tile Collision
+		Tile-Type Layer: A tile-size by tile-size chunk, each tile taking two bytes: first is tileset index, second is tile index within that tileset. (Exception: Collision Layer uses only the collision tileset (00), so all tiles are one byte.)
+		Image-Type Layer: Two bytes image index, two bytes X parallax, two bytes Y parallax, two bytes scrolling speed X, two bytes scrolling speed Y
+	* BC ZZ RRGGBBAA is background color; ZZ determines position in draw order
+	* EB00 is next block, ED00 is entity data, FFFF is EOF
+		Entity Data: Four byte entity ID. Two bytes X, two bytes Y, then entity options. Repeat as many times as necessary; terminated with Entity ID FFFF.
+Optional Custom Option Data-- Two-byte Option ID, then a number of bytes corresponding to that option.
+  Valid Options: Custom Door Colors 6-15 - three bytes follow, RGB hex color.

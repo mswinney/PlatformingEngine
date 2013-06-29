@@ -1,0 +1,93 @@
+Pre-load entities in the room and all adjacent rooms
+Figure out a way to easily check entity coordinates? better than that O(n) linear search. keep in a list sorted by X, maybe?
+add all layers to an arraylist, then sort by depth
+
+New format additions:
+Two BG image layers, and distance to each-- short for image index, short for X parallax, short for Y parallax (BG moves 1 pixel for each N pixels moved by the player-- negative means inverse, moves N pixels for each pixel moved by the player)
+ * automatically wrap always? or only if a scroll speed is enabled?
+Collision tile layer
+ * Includes special tiles (for Speed Buster blocks or loose soil blocks or...)
+ * Tile duration: once you destroy it, does it come back? If so, after how long?
+  * How to save destroyed tiles... Just make it scripts that set flags?
+Background shading: an option for alpha to fade with X or Y position?
+Segments that are "illusions": the look of a bunch of tiles until you get behind it.
+Specification: a tileset can have at most 256 tiles (0000 is blank space)
+
+
+Design:
+Force them to learn basic things to progress, early on
+Symmetry: show them the X on one side, then make them do it on the other
+Don't fill in every gap, though; early on teach them that not every map gap will be filled
+Give them an easy, weak method of tapping walls to see if there's anything, then later an auto-thing that does it for every tile onscreen
+Don't have rooms without any purpose or secret
+DETERMINISTIC. Base things on player position and behavior, not on RNG.
+Skippable "convenience switches" which make a platform closer to make a jump easier-- but it's possible without them.
+Hold button to auto-skip dialogue, or turn it off entirely
+Bosses which can be hit multiple times per opening
+
+TODO
+add "show collision layer" checkbox to layer panel-- draws over top if this is checked, at depth 0 if not
+add new layers
+	- Tile Layers
+	- Image Layers
+	- Color Layers
+delete layers
+make the layer list's width fixed
+make it possible to resize the layer list
+remove width/height from color layer; it covers the whole screen
+make sure tilelayer's undo works
+move layers up and down in ordering
+edit layer properties for image and color layers (which image and what scrolling speed, what color)
+when Save As'd with a new name, update window title
+  * finish scroll bars on palette
+add Properties menu with global door color RGB changes
+Remember window size and position on screen
+
+two forms (machine and human?), two different mentors, each with very contradictory outlooks on the world they try to pass on to you
+
+Possibilities:
+1. Atmospheric, wordless. Color and light, exploring a floating city or space station. There's nobody left, just vending machines and robots, and when you get into Albion, you see why-- all the administrators killed each other in power struggles. Some of the buildings are boarded up, hoarding food, a corpse having suicided.
+1.5: Orpheus: Exploring a space station for scrap, trying to piece together what happened. Find survivors, and they become playable.
+Sonic '06: Silver can skip across water
+VN? Explore city, talk to people, figure out plots?
+Simple. Movement. Hit a wall, and you have a moment stuck to the wall to hit jump to recover some of your quickly-decaying momentum. Swing around poles to keep your momentum. Game about parkour?
+GAME ABOUT DELIVERING PIZZA AT MACH SPEED IN THE DARK CYBERPUNK FUTURE.
+	Take damage and you drop the pizza-- you can put it down somewhere for safe-keeping while you kill enemies, but if they get it they'll run off with it.
+	Expand later into delivering things of dubious legality-- does the player realize what they're delivering? Maybe they've been delivering those sorts of things the whole time. Final mission: deliver a bomb somewhere?
+
+Mechanics:
+MM7 energy balancer, the cost of which is that it takes time to deploy its energy into your weapons; it's a buffer that ticks into your lowest weapon every few seconds, or just nowhere if they're all full / above a threshhold
+So how go fast
+	- Premonition: glowy/translucent previews of what's coming up that start showing up past a certain speed threshhold
+	- Momentum Cancel: hit a Cancel button, and all your speed's turned into an Energy meter at the bottom of the screen. Hit Cancel again to launch with half-3/4 of it, then hold to use up the rest gradually and get you to full speed.
+	- Momentum Switch: hit a button and you turn momentum on/off
+		No momentum: faster accel, lower top speed
+		Momentum: lower accel, much higher top speed
+Super Metroid jumping physics (requested by aurida)
+Charge-tackle things, and they're knocked aside
+Move faster in air than on ground?
+	- Movement speeds: dashing (air or ground, same speed) > jumping > walking
+	- A little bit of inertia with the dash-- you slow back down to regular speed, and have a small window to hit dash again (or maybe hold to autodash?)
+	- Don't reset speed on hitting ground!!!
+Moonwalk button (locks your facing-- move backwards and you don't change direction)
+Motorcycle stages: don't autoscroll, let them control speed, let them get off motorcycle if they want to.
+Stage-based gameplay, but you can explore the world between stages
+ * When you choose a mission, it puts you at the starting point (fade to black, fade back in with character walking to start of mission).
+ * You can practice old missions whenever you want.
+First attack draws glowy energy sword, which people see and makes stealth much harder-- achievements for getting through an entire stage without drawing your weapon?
+
+Bosses:
+running straight up between two buildings-- boss is crablike, crawling up between the two. get to the top, and you attack it from above as the two of you fall
+running on a highway, giant gunship beside you. avoid its weapons and the potholes its shells make in the highway, then use an exit ramp to get atop the gunship. break inside, start wrecking things, break out of the cockpit's giant window and land on the highway.
+Giant crablike boss with two giant fists that punch the ground. It skitters from side to side, and your goal is to blow open its center, get inside, and blow it up from inside.
+
+Features:
+Speedrun Mode: timer on screen, set up splits, best time can be segmented or single-segment run.
+ - Race Mode: Enter start and end coords, or random for one or both with a suggested duration of 5-30 rooms. Special remix medley of all the tracks that phases into a boss track.
+pause buffering
+"secret world" mode-- endless number of glitchy screens, based on the Metroid 2 glitch
+packaged-up custom player/character files
+
+Names:
+Palida Narrow (mysterious font installed by Gauss)
+OP / Optimal Pizza: We Always Deliver

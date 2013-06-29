@@ -1,0 +1,68 @@
+Controls:
+L: Lock facing / Moonwalk
+R: Dash / Boost
+A: Jump
+X: Attack
+B: Talk
+Y: [Special Mechanic]
+
+Mobility Model Verdant-A03
+	An amateur shadowrunner with a love of speed; secretly the second robot manufactured. Magus's design palette-swappd to green-- obnoxious and implausible, with headphones. Young and idealistic.
+Combat Model Crimson-101
+	Red robot. The one who escaped years ago, and took the green robot with him, wiping his memory to convince him he's just a human. Doesn't look human at all-- tore off his plating and forged his own identity.
+Dynamic Model Azure-41C
+	Blue robot. The new robot. Tries to find himself in human society, possibly by working as pizza delivery?
+
+Index 00 // Gray Sky Gradation
+The streets of Neo-Chiba City are overcast and rainy, but that doesn't stop Green from getting his motorcycle on the streets and really opening it up. Things go awry when his motorcycle slips off the new raised highway, and he flies off and crashes through the glass walls of a very powerful organization's skyscraper.
+He interrupts the testing of a new robot, and sort of forces it to escape (his motorcycle carries it out the other side of the building). You then have the option at one point in the ensuing stage of going up or down, and if you're killed, you're just dead/"retrieved" in this canon and you immediately leap to someone else.
+Depending on how you play, it gives you control of one of the three characters and opens up their storyline.
+
+Make the plot a grid-thing?
+[00] [01] [02] 00 is opening stage
+[10] [11] [12] 01 10 and 11 are each character's first stage...
+[20] [21] [22]
+
+>> GREEN PLOT
+
+>> RED PLOT
+Red sees the explosion from the rooftop of his apartment building, and says to himself "Guess it's time to go." He works his way to the site where Blue landed, but Blue's long gone. If he takes over a certain amount of time, guards establish a perimeter, and he can't investigate the scene to get clues to Blue's next location [Stage 2B]. If he's fast enough, he stays hot on Blue's trail [Stage 2A].
+	// Stage 2A
+	Red trails Blue through the city. If he falls behind, the corp goons attack him, and Blue gets away [Stage 3A]. If he catches up, he confronts Blue and tries to explain what happened, showing Blue what he is [Stage 3B].
+		// Stage 3A
+		Blue and Red meet for a moment before the stage, and Red basically says "there's no time, let me activate your weapons systems". This comes as way too much of a shock to him, and using his newly-awakened weapons, Blue runs into the Harbor District and wrecks shit, and it's your job to track him down through the wreckage.
+		Boss: Blue
+		// Stage 3B
+		Similar to 3A, but reworked: Red and Blue have teamed up now, and there's a tutorial section to teach you how to play Blue and use teamwork stuff. Instead of chasing Blue, then, your pressure is the corp goons chasing you, and you're encouraged to warn people to get out of the way of the incoming army. They give you stuff with which to take on the tank, which you can take on at any time just by running backwards.
+		Boss: Megalo Tank
+
+	// Stage 2B
+	Red goes to his favorite bar to cool off, but the corp goons are everywhere. This is Red's personal arc, essentially-- from here he proceeds to 3C if he wants to blow them up so they don't bother him, or 3D if he just wants to hide/lay low and get some peace and quiet. Either way, if Green's still alive, he joins up with you for Stage 3.
+		// Stage 3C
+		Green meets Red, and complains to him about being hunted by the corp. Red sympathizes, and says "We're never gonna get any peace until either we're dead, or they are. So let's go make one of those happen." (Or just charges out alone against them, fed up with all this shit.)
+		Boss: Corporate Gunship
+		// Stage 3D
+		Similar, only Red says "let's just try to get out of the city." (Or just tries to get out himself.)
+		Boss: Border Patrol (massive crablike machine clutching with two massive arms to the wall surrounding the city)
+
+>> BLUE PLOT
+Two forks: undiscovered and trying to get by (Green), discovered and running (Red)
+	// Stage 2A
+	Long stage, meet up with Red halfway through. If you attack Red, you're pulled into a boss battle with him and go straight to 3B after the fight.
+		// Stage 3A
+		Team up with Red
+		Boss: Mechanical Pursuer (birdplane thing that chases you throughout the stage, leap onto it from a skyscraper and take it down; they assume nobody could have survived that and leave you be)
+		// Stage 3B
+		Fight Red-- after he's defeated, he whispers "why?" and keels over. Green, if he's still alive, drops in midway through this stage to drive back the boss, and you have the option to kill or team up with him.
+		Mid-Boss if Green is dead: [Boss] Phase 1
+		Optional Mid-Boss if Green is alive: Green
+		Boss: [Boss] Phase 2
+		
+	// Stage 2B
+	Pizza delivery!
+		// Stage 3C
+		The corp discovered you, and they raid the pizza place in search of you! If Green's dead, you decide to fake your death somewhere you know they'll see it; if not, he says that's stupid and says "let's take the fight to them!" The first half of the stage is the same, getting up to the building where you were "born". The second half is then either getting inside stealthily, or getting inside and wrecking shit.
+		Boss: Prototype Machine (Silver Sonic kinda thing)
+		// Stage 3D
+		Green orders a pizza, and challenges you to a race. You're completely undetected by the corps.
+		Boss: Green
