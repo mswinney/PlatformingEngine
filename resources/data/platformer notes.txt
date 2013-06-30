@@ -34,8 +34,6 @@ add new layers
 delete layers
 make the layer list's width fixed
 make it possible to resize the layer list
-remove width/height from color layer; it covers the whole screen
-make sure tilelayer's undo works
 move layers up and down in ordering
 edit layer properties for image and color layers (which image and what scrolling speed, what color)
 when Save As'd with a new name, update window title

@@ -66,6 +66,7 @@ public class TilePanel extends EditorPanel {
 		
 		@Override
 		public void mousePressed(MouseEvent e) {
+			getParent().getEditor().setLastClickType(e.getButton());
 			getParent().getEditor().focus();
 		}
 		

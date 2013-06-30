@@ -98,7 +98,9 @@ public class LevelEditor extends JFrame {
 		
 		this.setSize(640, 480);
 		this.setMinimumSize(new Dimension(640, 480));
-		this.setVisible(true); 
+		this.setVisible(true);
+		
+		this.setWorkingCoords(workingX, workingY);
 	}
 
 	private void setupKeypresses() {
@@ -331,6 +333,7 @@ public class LevelEditor extends JFrame {
 		workingY = ZettaUtil.clamp(wy, 0, zone.getHeight()-1);
 		if (layerPanel != null) {
 			layerPanel.updateLayers(this.getCurrentBlock());
+			this.currentLayer = layerPanel.getCurrentTileLayer();
 		}
 		this.repaint();
 	}
@@ -367,7 +370,7 @@ public class LevelEditor extends JFrame {
 			case DOWN: this.setWorkingCoords(workingX, workingY+1); break;
 			case JUMP: ZettaUtil.log("Undo: " + undo + "\nRedo: " + redo +
 					"\nCurrent Tile Layer: " + currentLayer); break;
-			case DEBUG: ZettaUtil.log("You hit the DEBUG key.");
+			case DEBUG: ZettaUtil.log(this.getCurrentBlock().getCollisionLayer());
 			break;
 			}
 		}
@@ -432,7 +435,8 @@ public class LevelEditor extends JFrame {
 		wy = Integer.parseInt(line[1]);
 		filename = line[2];
 		this.openFile(new File(filename));
-		this.setWorkingCoords(wx, wy);
+		workingX = wx;
+		workingY = wy;
 		try {
 			f.close();
 		} catch (IOException e) {
@@ -604,7 +608,7 @@ public class LevelEditor extends JFrame {
 			this.block = LevelEditor.editor.getCurrentBlock();
 		}
 		public String toString() {
-			return type + " " + before + " -> " + after + " (" + block + ")";
+			return type + " " + before + " -> " + after;// + " (" + block + ")";
 		}
 		private boolean isMoot() {
 			return this.before.equals(this.after);
@@ -649,7 +653,7 @@ public class LevelEditor extends JFrame {
 		if (this.getCurrentBlock() != null) {
 			Change next = new Change(type, initialValue, finalValue);
 			if (next.isMoot()) {
-				System.out.println("Moot");
+				ZettaUtil.log("Moot");
 				return;
 			}
 			Change last = undo.peek();
@@ -691,12 +695,12 @@ public class LevelEditor extends JFrame {
 		this.tilePalettePanel = p;
 	}
 
-	public void executeTileClick(int i, int j, int k) {
+	public void executeTileClick(int i, int j, int mouseButton) {
 		if (i < 0 || j < 0 ||
 				i >= this.getZone().getBlockSizeX() || j >= this.getZone().getBlockSizeY()) {
 			return;
 		}
-		if (this.isLastClick(k, MouseEvent.BUTTON1)) {
+		if (this.isLastClick(mouseButton, MouseEvent.BUTTON1)) {
 			// left click; write current tile to location
 			if (0 <= i && i < this.getZone().getBlockSizeX() &&
 					0 <= j && j < this.getZone().getBlockSizeY()) {
@@ -722,16 +726,16 @@ public class LevelEditor extends JFrame {
 				this.repaint();
 			}
 		}
-		else if (this.isLastClick(k, MouseEvent.BUTTON3)) {
+		else if (this.isLastClick(mouseButton, MouseEvent.BUTTON3)) {
 			// right click; read current tile from location
 			if (this.getCurrentBlock() != null) {
 				this.tilePalettePanel.setCurrentTile(currentLayer.getTile(i, j));
 			}
 		}
 		else {
-			ZettaUtil.log("Unknown clicktype " + k);
+			ZettaUtil.log("Unknown clicktype " + mouseButton);
 		}
-		this.setLastClickType(k);
+		this.setLastClickType(mouseButton);
 	}
 
 	private boolean isLastClick(int k, int index) {
@@ -749,12 +753,12 @@ public class LevelEditor extends JFrame {
 	}
 
 	private void updateCollisionTile(int i, int j, Tile currentTile) {
-		CollisionLayer newLayer = (CollisionLayer)
-				this.getCurrentBlock().getCollisionLayer().duplicate();
-		if (currentTile.equals(newLayer.getTile(i, j))) {
+		CollisionLayer oldLayer = this.getCurrentBlock().getCollisionLayer();
+		if (currentTile.equals(oldLayer.getTile(i, j))) {
 			return;
 		}
-		newLayer.setTile(tilePalettePanel.getCurrentTile(), i, j);
+		CollisionLayer newLayer = (CollisionLayer) (oldLayer.duplicate());
+		newLayer.setTile(currentTile, i, j);
 		this.change(ChangeType.COLLISION_TILE, this.getCurrentBlock().getCollisionLayer(),
 				newLayer);
 	}

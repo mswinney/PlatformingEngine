@@ -11,7 +11,7 @@ import platform.Zone;
 import platform.layer.TileLayer.Tile;
 
 public class CollisionLayer extends Layer implements TileTypeLayer {
-	private short[][] tiles;
+	public short[][] tiles;
 	public CollisionLayer(Block parentBlock, RandomAccessFile data, Zone parent)
 			throws IOException {
 		super(parentBlock, (byte) 0);
@@ -28,7 +28,11 @@ public class CollisionLayer extends Layer implements TileTypeLayer {
 	}
 	public CollisionLayer(CollisionLayer c) {
 		super(c.getParentBlock(), c.getDepth());
-		this.tiles = c.tiles.clone();
+		short[][] newTiles = new short[c.tiles.length][c.tiles[0].length];
+		for (int i = 0; i < c.tiles.length; i++) {
+			newTiles[i] = c.tiles[i].clone();
+		}
+		this.tiles = newTiles;
 	}
 	
 	@Override
@@ -38,7 +42,7 @@ public class CollisionLayer extends Layer implements TileTypeLayer {
 	}
 	
 	public String toString() {
-		return "Collision";
+		return super.toString() + " " + this.tiles + " " + this.tiles[0][0];
 	}
 
 	@Override
@@ -70,7 +74,7 @@ public class CollisionLayer extends Layer implements TileTypeLayer {
 
 	@Override
 	public void setTile(Tile t, int x, int y) {
-		tiles[y][x] = (short) t.getIndex();
+		this.tiles[y][x] = (short) t.getIndex();
 	}
 
 	@Override
