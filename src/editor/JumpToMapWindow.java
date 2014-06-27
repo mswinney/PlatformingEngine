@@ -10,7 +10,7 @@ import java.awt.event.MouseMotionListener;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
-import platform.Zone;
+import leveldata.Zone;
 
 public class JumpToMapWindow extends JDialog implements MouseListener, MouseMotionListener {
 	private static final long serialVersionUID = -5214951792743399452L;

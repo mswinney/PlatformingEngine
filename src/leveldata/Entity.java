@@ -1,4 +1,4 @@
-package platform;
+package leveldata;
 
 import java.awt.Graphics;
 

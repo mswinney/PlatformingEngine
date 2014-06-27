@@ -1,11 +1,11 @@
-package platform.layer;
+package leveldata.layer;
 
 import java.awt.Graphics;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
-import platform.Block;
-import platform.ZettaUtil;
+import leveldata.Block;
+import leveldata.ZettaUtil;
 
 public abstract class Layer implements Comparable<Layer>, Cloneable {
 	private byte depth;

@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-import platform.ZettaUtil;
+import leveldata.ZettaUtil;
 
 public final class Controls {
 	private static final String CONTROL_FILE = "resources/defaultcontrols.ini";

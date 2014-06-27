@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 
-import platform.ZettaUtil;
+import leveldata.ZettaUtil;
 
 public class MapPanel extends EditorPanel {
 	private static final long serialVersionUID = -3837809056314759879L;

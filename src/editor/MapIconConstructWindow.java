@@ -17,7 +17,7 @@ import editor.LevelEditor.Change.ChangeType;
 import editor.MapIconPanel.MapIcon.DoorPosition;
 import editor.MapIconPanel.MapIcon.ScrollLock;
 
-import platform.Block;
+import leveldata.Block;
 
 public class MapIconConstructWindow extends JDialog {
 	private static final long serialVersionUID = 6172096767912903453L;

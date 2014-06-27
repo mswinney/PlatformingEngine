@@ -5,7 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 
-import platform.Zone;
+import leveldata.Zone;
 import ui.Game;
 
 public class TilePanel extends EditorPanel {

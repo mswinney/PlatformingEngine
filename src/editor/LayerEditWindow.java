@@ -12,8 +12,8 @@ import javax.swing.JPanel;
 
 import editor.LevelEditor.Change.ChangeType;
 
-import platform.layer.ColorLayer;
-import platform.layer.Layer;
+import leveldata.layer.ColorLayer;
+import leveldata.layer.Layer;
 
 public class LayerEditWindow extends JDialog {
 	private static final long serialVersionUID = 8744315264157837679L;

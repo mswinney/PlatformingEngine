@@ -7,9 +7,9 @@ import javax.swing.JSpinner;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import platform.Block;
-import platform.ZettaUtil;
-import platform.layer.TileLayer.Tile;
+import leveldata.Block;
+import leveldata.ZettaUtil;
+import leveldata.layer.TileLayer.Tile;
 import ui.Game;
 
 public class TilePalettePanel extends EditorPanel {

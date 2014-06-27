@@ -1,14 +1,14 @@
-package platform.layer;
+package leveldata.layer;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
-import platform.Block;
-import platform.ZettaUtil;
-import platform.Zone;
-import platform.layer.TileLayer.Tile;
+import leveldata.Block;
+import leveldata.ZettaUtil;
+import leveldata.Zone;
+import leveldata.layer.TileLayer.Tile;
 
 public class CollisionLayer extends Layer implements TileTypeLayer {
 	public short[][] tiles;

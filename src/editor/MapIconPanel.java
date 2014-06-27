@@ -5,7 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import javax.swing.JPanel;
 
-import platform.Block;
+import leveldata.Block;
 
 public class MapIconPanel extends JPanel {
 	private static final long serialVersionUID = 1777557279914469983L;

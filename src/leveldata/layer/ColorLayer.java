@@ -1,4 +1,4 @@
-package platform.layer;
+package leveldata.layer;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -7,8 +7,8 @@ import java.io.RandomAccessFile;
 
 import editor.LevelEditor;
 
-import platform.Block;
-import platform.Zone;
+import leveldata.Block;
+import leveldata.Zone;
 
 import ui.Game;
 

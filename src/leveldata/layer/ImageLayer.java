@@ -1,10 +1,10 @@
-package platform.layer;
+package leveldata.layer;
 
 import java.awt.Graphics;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
-import platform.Block;
+import leveldata.Block;
 
 public class ImageLayer extends Layer {
 	private short imageIndex;

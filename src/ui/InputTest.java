@@ -3,7 +3,7 @@ package ui;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import platform.ZettaUtil;
+import leveldata.ZettaUtil;
 
 public class InputTest extends Game {
 	

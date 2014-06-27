@@ -1,6 +1,6 @@
-package platform.layer;
+package leveldata.layer;
 
-import platform.layer.TileLayer.Tile;
+import leveldata.layer.TileLayer.Tile;
 
 public interface TileTypeLayer {
 	public Tile getTile(int x, int y);

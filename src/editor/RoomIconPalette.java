@@ -5,8 +5,8 @@ import java.awt.image.BufferedImage;
 
 import editor.MapIconPanel.MapIcon.ScrollLock;
 
-import platform.Block;
-import platform.Zone;
+import leveldata.Block;
+import leveldata.Zone;
 import ui.Game;
 
 public class RoomIconPalette extends AbstractPalette {

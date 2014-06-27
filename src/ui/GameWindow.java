@@ -9,6 +9,9 @@ import javax.swing.JFrame;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
 
+import engine.EngineTest;
+import leveldata.EditTest;
+import leveldata.ZettaUtil;
 import ui.Controls.Input;
 
 public class GameWindow extends Component {
@@ -53,8 +56,10 @@ public class GameWindow extends Component {
 
 	public GameWindow() {
 		// pass command-line params here?
-		game = new InputTest();
-		//game = new EditTest("stagev3.dat");
+		//game = new InputTest();
+        ZettaUtil.init();
+        //game = new EditTest("bigstage.dat");
+        game = new EngineTest("bigstage.dat");
 
 		// set up control scaffolding
 		controlPressed = new boolean[Controls.Input.values().length];

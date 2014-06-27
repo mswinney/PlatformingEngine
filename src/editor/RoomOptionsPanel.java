@@ -12,7 +12,7 @@ import javax.swing.event.ChangeListener;
 
 import editor.LevelEditor.Change.ChangeType;
 
-import platform.Block;
+import leveldata.Block;
 
 public class RoomOptionsPanel extends EditorPanel {
 	private static final long serialVersionUID = -6453287591760809363L;

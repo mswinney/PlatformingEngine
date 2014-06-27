@@ -34,13 +34,13 @@ import javax.swing.filechooser.FileFilter;
 import editor.LevelEditor.Change.ChangeType;
 import editor.MapIconPanel.MapIcon;
 
-import platform.Block;
-import platform.ZettaUtil;
-import platform.Zone;
-import platform.layer.CollisionLayer;
-import platform.layer.Layer;
-import platform.layer.TileLayer.Tile;
-import platform.layer.TileTypeLayer;
+import leveldata.Block;
+import leveldata.ZettaUtil;
+import leveldata.Zone;
+import leveldata.layer.CollisionLayer;
+import leveldata.layer.Layer;
+import leveldata.layer.TileLayer.Tile;
+import leveldata.layer.TileTypeLayer;
 import ui.Controls;
 import ui.Controls.Input;
 

@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
-import platform.ZettaUtil;
+import leveldata.ZettaUtil;
 
 public abstract class AbstractPalette extends JPanel {
 	private static final long serialVersionUID = 6307052543710474271L;

@@ -7,6 +7,7 @@ Two BG image layers, and distance to each-- short for image index, short for X p
  * automatically wrap always? or only if a scroll speed is enabled?
 Collision tile layer
  * Includes special tiles (for Speed Buster blocks or loose soil blocks or...)
+	destroy any tiles above it?
  * Tile duration: once you destroy it, does it come back? If so, after how long?
   * How to save destroyed tiles... Just make it scripts that set flags?
 Background shading: an option for alpha to fade with X or Y position?

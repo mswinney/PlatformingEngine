@@ -1,4 +1,4 @@
-package platform;
+package leveldata;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics;
@@ -9,7 +9,7 @@ import java.io.RandomAccessFile;
 import java.util.Random;
 import javax.imageio.ImageIO;
 
-import platform.layer.TileLayer.Tile;
+import leveldata.layer.TileLayer.Tile;
 
 import ui.Game;
 
@@ -137,7 +137,7 @@ public final class ZettaUtil {
 	}
 	public static void init() {
 		Block.loadTilesets();
-		platform.layer.LayerID.initialize();
+		leveldata.layer.LayerID.initialize();
 	}
 	public static String pathComponent(String fp) {
 		if (fp != null) {

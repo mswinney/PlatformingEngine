@@ -1,4 +1,4 @@
-package platform;
+package leveldata;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -7,10 +7,10 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
 import editor.EditorPanel;
-import platform.layer.LayerID;
-import platform.layer.CollisionLayer;
-import platform.layer.ColorLayer;
-import platform.layer.TileLayer.Tile;
+import leveldata.layer.LayerID;
+import leveldata.layer.CollisionLayer;
+import leveldata.layer.ColorLayer;
+import leveldata.layer.TileLayer.Tile;
 import ui.Game;
 
 public class Zone {

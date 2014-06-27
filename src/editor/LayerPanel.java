@@ -16,9 +16,9 @@ import javax.swing.event.ListSelectionListener;
 
 import editor.LevelEditor.Change.ChangeType;
 
-import platform.Block;
-import platform.layer.Layer;
-import platform.layer.TileTypeLayer;
+import leveldata.Block;
+import leveldata.layer.Layer;
+import leveldata.layer.TileTypeLayer;
 
 public class LayerPanel extends EditorPanel implements ListSelectionListener {
 	private static final long serialVersionUID = -1058797019735080913L;

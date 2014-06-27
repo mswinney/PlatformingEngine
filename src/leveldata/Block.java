@@ -1,4 +1,4 @@
-package platform;
+package leveldata;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -8,9 +8,9 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import platform.layer.CollisionLayer;
-import platform.layer.Layer;
-import platform.layer.LayerID;
+import leveldata.layer.CollisionLayer;
+import leveldata.layer.Layer;
+import leveldata.layer.LayerID;
 import editor.MapIconPanel.MapIcon;
 
 public class Block {
@@ -100,7 +100,7 @@ public class Block {
 	public void paintEditor(Graphics g) {
 		drawBlock(g, 1, 1);
 	}
-	private void drawBlock(Graphics g, int i, int j) {
+	public void drawBlock(Graphics g, int i, int j) {
 		// TODO: update for layers
 		// draw tiles
 		for (Layer l : layers) {

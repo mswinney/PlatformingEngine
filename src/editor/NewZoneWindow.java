@@ -10,7 +10,7 @@ import javax.swing.JSpinner;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import platform.Zone;
+import leveldata.Zone;
 
 import editor.MapIconConstructWindow.CloseOnOkayListener;
 
