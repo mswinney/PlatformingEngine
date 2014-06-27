@@ -25,8 +25,8 @@ public class EngineTest extends ui.Game {
     private static final int STATUS_BAR_MAP_Y_OFFSET = 0;
     private static final Color PLAYER_DOT_COLOR = new Color(128, 128, 128, 200);
     private static final Color MAP_BACKGROUND_COLOR = Color.BLUE;
-    private static final Color WINDOW_BACKGROUND_COLOR = Color.BLACK;
-    private static final Color GAME_BACKGROUND_COLOR = Color.WHITE;
+    private static final Color SIDEBAR_BACKGROUND_COLOR = Color.BLACK;
+    private static final Color GAME_BACKGROUND_COLOR = Color.GRAY;
 
     private static enum MapMode {
         ENGINE_TEST,
@@ -62,13 +62,22 @@ public class EngineTest extends ui.Game {
             case ENGINE_TEST:
                 int sidebarWidth = STATUS_BAR_MAP_WIDTH * MAP_TILE_WIDTH;
                 Dimension windowSize = this.getWindowSize();
-                g.setColor(WINDOW_BACKGROUND_COLOR);
+
+                // draw sidebar
+                g.setColor(SIDEBAR_BACKGROUND_COLOR);
                 g.fillRect(0, 0, windowSize.width, windowSize.height);
+
+                // draw map
                 g.setColor(MAP_BACKGROUND_COLOR);
                 g.fillRect(STATUS_BAR_MAP_X_OFFSET, STATUS_BAR_MAP_Y_OFFSET, sidebarWidth,
                         STATUS_BAR_MAP_HEIGHT * MAP_TILE_HEIGHT);
                 zone.paintFullMap(g, mapX, mapY, STATUS_BAR_MAP_WIDTH, STATUS_BAR_MAP_HEIGHT,
                         STATUS_BAR_MAP_X_OFFSET, STATUS_BAR_MAP_Y_OFFSET);
+                g.setColor(PLAYER_DOT_COLOR);
+                g.fillRect(STATUS_BAR_MAP_WIDTH/2 * MAP_TILE_WIDTH + 6,
+                        STATUS_BAR_MAP_HEIGHT/2 * MAP_TILE_HEIGHT + 6, 4, 4);
+
+                // draw current block
                 g.setColor(GAME_BACKGROUND_COLOR);
                 g.fillRect(sidebarWidth, 0, windowSize.width - sidebarWidth, windowSize.height);
                 Block currentBlock = zone.getBlock(mapX, mapY);
