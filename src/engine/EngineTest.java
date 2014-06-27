@@ -6,8 +6,10 @@ import java.awt.Graphics;
 import java.io.IOException;
 
 import leveldata.Block;
+import leveldata.ZettaUtil;
 import leveldata.Zone;
 import ui.Controls.Input;
+import ui.Game;
 
 public class EngineTest extends ui.Game {
 
@@ -21,6 +23,8 @@ public class EngineTest extends ui.Game {
     private int screenY;
     // amount of change remaining to bleed into screen coordinates
     // TODO implement
+    private int playerDeltaX;
+    private int playerDeltaY;
     private int screenDeltaX;
     private int screenDeltaY;
     private Zone zone;
@@ -31,28 +35,28 @@ public class EngineTest extends ui.Game {
     private static final int STATUS_BAR_MAP_WIDTH = 3;
     private static final int STATUS_BAR_MAP_X_OFFSET = 0;
     private static final int STATUS_BAR_MAP_Y_OFFSET = 0;
+    private static final int SIDEBAR_WIDTH = STATUS_BAR_MAP_WIDTH * MAP_TILE_WIDTH;
     private static final Color PLAYER_DOT_COLOR = new Color(128, 128, 128, 200);
     private static final Color MAP_BACKGROUND_COLOR = Color.BLUE;
     private static final Color SIDEBAR_BACKGROUND_COLOR = Color.BLACK;
     private static final Color GAME_BACKGROUND_COLOR = Color.GRAY;
     int delta = 16;
+    private boolean[] scrollLocks = new boolean[4]; // up, down, left, right
 
     public EngineTest(String stageName) {
         String stageLoc = DATA_LOCATION + stageName;
         try {
             zone = new Zone(stageLoc);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         Block.loadTilesets();
-        playerX = zone.getStartingX() * zone.getBlockSizeX() + 32;
-        playerY = zone.getStartingY() * zone.getBlockSizeY() + 32;
+        playerX = zone.getStartingX() * zone.getBlockSizeX();
+        playerY = zone.getStartingY() * zone.getBlockSizeY();
     }
 
     @Override
     public void paint(Graphics g) {
-        int sidebarWidth = STATUS_BAR_MAP_WIDTH * MAP_TILE_WIDTH;
         Dimension windowSize = this.getWindowSize();
 
         // draw background
@@ -70,18 +74,28 @@ public class EngineTest extends ui.Game {
                 STATUS_BAR_MAP_WIDTH * TILE_X, windowSize.height - STATUS_BAR_MAP_HEIGHT);
 
         // draw "player"
+        drawPlayer(g);
+    }
+
+    private void drawPlayer(Graphics g) {
         g.setColor(Color.CYAN);
         //g.fillRect(sidebarWidth + roomX + 6, roomY + 6, 4, 4);
-        g.fillRect(zone.getBlockSizeX()/2 * TILE_X + sidebarWidth + 6,
-                zone.getBlockSizeY()/2 * TILE_Y + 6, 4, 4);
+        //g.fillRect(zone.getBlockSizeX()/2 * TILE_X + SIDEBAR_WIDTH + 6,
+        //        zone.getBlockSizeY()/2 * TILE_Y + 6, 4, 4);
+        g.fillRect(playerX - screenX + SIDEBAR_WIDTH + (TILE_X * zone.getBlockSizeX()/2),
+                playerY - screenY + (TILE_Y * zone.getBlockSizeY()/2), 16, 16);
+    }
+
+    private void toggleCameraLock() {
+        scrollLocks[0] = !scrollLocks[0];
+        ZettaUtil.log("Screen lock: " + scrollLocks[0]);
     }
 
     private void drawCurrentBlock(Graphics g) {
-        int sidebarWidth = STATUS_BAR_MAP_WIDTH * MAP_TILE_WIDTH;
         Dimension windowSize = this.getWindowSize();
         // draw background
         g.setColor(GAME_BACKGROUND_COLOR);
-        g.fillRect(sidebarWidth, 0, windowSize.width - sidebarWidth, windowSize.height);
+        g.fillRect(SIDEBAR_WIDTH, 0, windowSize.width - SIDEBAR_WIDTH, windowSize.height);
 
         drawRoom(g, 0, 0, 0, 0);
         // draw neighboring blocks
@@ -114,13 +128,12 @@ public class EngineTest extends ui.Game {
     }
 
     private void drawRoom(Graphics g, int mapDeltaX, int mapDeltaY, int roomDeltaX, int roomDeltaY) {
-        int mapX = this.getPlayerMapX();
-        int mapY = this.getPlayerMapY();
+        int mapX = this.getScreenMapX();
+        int mapY = this.getScreenMapY();
         int roomX = zone.getBlockSizeX()/2;
         int roomY = zone.getBlockSizeY()/2;
-        int sidebarWidth = STATUS_BAR_MAP_WIDTH * MAP_TILE_WIDTH;
-        int pixelOffsetX = sidebarWidth-this.getPlayerRoomX();
-        int pixelOffsetY = -this.getPlayerRoomY();
+        int pixelOffsetX = SIDEBAR_WIDTH-this.getScreenRoomX();
+        int pixelOffsetY = -this.getScreenRoomY();
         zone.drawBlockOffset(g, mapX + mapDeltaX, mapY + mapDeltaY, roomX + roomDeltaX, roomY + roomDeltaY,
                 pixelOffsetX, pixelOffsetY);
     }
@@ -139,15 +152,13 @@ public class EngineTest extends ui.Game {
     }
 
     private void drawMap(Graphics g) {
-        int sidebarWidth = STATUS_BAR_MAP_WIDTH * MAP_TILE_WIDTH;
         g.setColor(MAP_BACKGROUND_COLOR);
-        g.fillRect(STATUS_BAR_MAP_X_OFFSET, STATUS_BAR_MAP_Y_OFFSET, sidebarWidth,
+        g.fillRect(STATUS_BAR_MAP_X_OFFSET, STATUS_BAR_MAP_Y_OFFSET, SIDEBAR_WIDTH,
                 STATUS_BAR_MAP_HEIGHT * MAP_TILE_HEIGHT);
         zone.paintFullMap(g, this.getPlayerMapX(), this.getPlayerMapY(), STATUS_BAR_MAP_WIDTH, STATUS_BAR_MAP_HEIGHT,
                 STATUS_BAR_MAP_X_OFFSET, STATUS_BAR_MAP_Y_OFFSET);
         g.setColor(PLAYER_DOT_COLOR);
-        g.fillRect(STATUS_BAR_MAP_WIDTH/2 * MAP_TILE_WIDTH + 6,
-                STATUS_BAR_MAP_HEIGHT/2 * MAP_TILE_HEIGHT + 6, 4, 4);
+        g.fillRect(STATUS_BAR_MAP_WIDTH/2 * MAP_TILE_WIDTH + 6, STATUS_BAR_MAP_HEIGHT/2 * MAP_TILE_HEIGHT + 6, 4, 4);
     }
 
     private int getPlayerMapX() {
@@ -162,10 +173,56 @@ public class EngineTest extends ui.Game {
     private int getPlayerRoomY() {
         return playerY % (TILE_Y * zone.getBlockSizeY());
     }
+    private int getScreenMapX() {
+        return screenX / (TILE_X * zone.getBlockSizeX());
+    }
+    private int getScreenMapY() {
+        return screenY / (TILE_Y * zone.getBlockSizeX());
+    }
+    private int getScreenRoomX() {
+        return screenX % (TILE_X * zone.getBlockSizeX());
+    }
+    private int getScreenRoomY() {
+        return screenY % (TILE_Y * zone.getBlockSizeY());
+    }
 
     @Override
     public void advanceAnimations() {
         showPlayerDot = showPlayerDot>60 ? 0: showPlayerDot+1;
+        // update player position
+        if (playerDeltaX > 0) {
+            playerX++;
+            playerDeltaX--;
+        }
+        else if (playerDeltaX < 0) {
+            playerX--;
+            playerDeltaX++;
+        }
+        if (playerDeltaY > 0) {
+            playerY++;
+            playerDeltaY--;
+        }
+        else if (playerDeltaY < 0) {
+            playerY--;
+            playerDeltaY++;
+        }
+        // update screen position
+        if (screenDeltaX > 0) {
+            screenX++;
+            screenDeltaX--;
+        }
+        else if (screenDeltaX < 0) {
+            screenX--;
+            screenDeltaX++;
+        }
+        if (screenDeltaY > 0) {
+            screenY++;
+            screenDeltaY--;
+        }
+        else if (screenDeltaY < 0) {
+            screenY--;
+            screenDeltaY++;
+        }
     }
 
     @Override
@@ -176,8 +233,17 @@ public class EngineTest extends ui.Game {
                 case RIGHT: movePixels(delta, 0); break;
                 case UP: movePixels(0, -delta); break;
                 case DOWN: movePixels(0, delta); break;
-                case DEBUG: delta = Math.max( delta/2, 1); break;
-                case JUMP: delta *= 2; break;
+                case DEBUG:
+                    //delta = Math.max( delta/2, 1);
+                    toggleCameraLock();
+                    break;
+                case JUMP:
+                    //delta *= 2;
+                    System.out.println("X: " + this.getPlayerMapX() + ":" + this.getPlayerRoomX() +
+                            "\tY: " + this.getPlayerMapY() + ":" + this.getPlayerRoomY() +
+                            "\t\t Screen X: " + this.getScreenMapX() + ":" + this.getScreenRoomX() +
+                            "\t Screen Y: " + this.getScreenMapY() + ":" + this.getScreenRoomY());
+                    break;
             }
         }
     }
@@ -185,12 +251,10 @@ public class EngineTest extends ui.Game {
     private void movePixels(int x, int y) {
         // TODO: check scroll lock, update accordingly
         // set up amount of delta if moving onto a locked axis
-        playerX += x;
-        playerY += y;
-        screenX += x;
-        screenY += y;
-        System.out.println("X: " + this.getPlayerMapX() + " " + this.getPlayerRoomX() +
-            " Y: " + this.getPlayerMapY() + " " + this.getPlayerRoomY());
+        playerDeltaX += x;
+        playerDeltaY += y;
+        screenDeltaX += x;
+        screenDeltaY += y;
     }
 
     @Override
