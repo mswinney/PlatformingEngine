@@ -11,7 +11,7 @@ public abstract class Layer implements Comparable<Layer>, Cloneable {
 	private byte depth;
 	private Block parentBlock;
 	
-	public abstract void paint(Graphics g, int i, int j);
+	public abstract void paint(Graphics g, int i, int j, int xOffset, int yOffset);
 	public abstract void saveData(RandomAccessFile file) throws IOException;
 	public abstract boolean hasEditableProperties();
 	public abstract boolean hasVariableDepth();

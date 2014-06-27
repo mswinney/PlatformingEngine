@@ -29,7 +29,7 @@ public class ImageLayer extends Layer {
 		this.Yscroll = l.Yscroll;
 	}
 	@Override
-	public void paint(Graphics g, int i, int j) {
+	public void paint(Graphics g, int i, int j, int xOffset, int yOffset) {
 		// TODO Auto-generated method stub
 
 	}

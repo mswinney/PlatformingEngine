@@ -40,10 +40,10 @@ public class ColorLayer extends Layer {
 	}
 
 	@Override
-	public void paint(Graphics g, int i, int j) {
+	public void paint(Graphics g, int i, int j, int xOffset, int yOffset) {
 		g.setColor(c);
 		Zone z = LevelEditor.editor.getZone();
-		g.fillRect(i*Game.TILE_X, j*Game.TILE_Y,
+		g.fillRect(i*Game.TILE_X + xOffset, j*Game.TILE_Y + yOffset,
 				 z.getBlockSizeX() * Game.TILE_X, z.getBlockSizeY() * Game.TILE_Y);
 	}
 

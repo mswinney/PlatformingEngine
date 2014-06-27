@@ -46,12 +46,12 @@ public class CollisionLayer extends Layer implements TileTypeLayer {
 	}
 
 	@Override
-	public void paint(Graphics g, int i, int j) {
+	public void paint(Graphics g, int i, int j, int xOffset, int yOffset) {
 		BufferedImage collisionTileset = Block.getTileset(0);
 		for (int y = 0; y < tiles.length; y++) {
 			for (int x = 0; x < tiles[y].length; x++) {
 				int t = tiles[y][x] & 0xFF;
-				ZettaUtil.drawTile(t, collisionTileset, g, x+i, y+j);
+				ZettaUtil.drawTile(t, collisionTileset, g, x+i, y+j, xOffset, yOffset);
 			}
 		}
 	}

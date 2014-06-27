@@ -21,11 +21,11 @@ public class TileLayer extends Layer implements TileTypeLayer {
 		tiles[y][x] = t;
 	}
 	@Override
-	public void paint(Graphics g, int i, int j) {
+	public void paint(Graphics g, int i, int j, int xOffset, int yOffset) {
 		for (int y = 0; y < tiles[0].length; y++) {
 			for (int x = 0; x < tiles.length; x++) {
 				Tile t = this.getTile(x, y);
-				ZettaUtil.drawTile(t.getIndex(), Block.getTileset(t.getTileset()), g, x+i, y+j);
+				ZettaUtil.drawTile(t.getIndex(), Block.getTileset(t.getTileset()), g, x+i, y+j, xOffset, yOffset);
 			}
 		}
 	}

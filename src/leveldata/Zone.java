@@ -232,6 +232,21 @@ public class Zone {
 				19,19);
 	}
 
+    public void drawBlockOffset(Graphics g, int mapX, int mapY, int roomX, int roomY,
+                                int pixelOffsetX, int pixelOffsetY) {
+        Block currentBlock = this.getBlock(mapX, mapY);
+        if (currentBlock != null) {
+            //currentBlock.paintBlockOffset(g, roomX + pixelOffsetX, roomY + pixelOffsetY);
+            currentBlock.drawBlock(g, roomX, roomY, pixelOffsetX, pixelOffsetY);
+        }
+        else {
+            // draw null block
+            g.setColor(NULL_ROOM_COLOR);
+            g.fillRect(roomX * Game.TILE_X + pixelOffsetX, roomY * Game.TILE_Y + pixelOffsetY,
+                    this.getBlockSizeX() * Game.TILE_X, this.getBlockSizeY() * Game.TILE_Y);
+        }
+    }
+
 	public int getWidth() { return map[0].length; }
 	public int getHeight() { return map.length; }
 	public int getStartingX() { return startingX & 0xFFFF;}

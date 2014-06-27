@@ -12,10 +12,17 @@ import ui.Controls.Input;
 public class EngineTest extends ui.Game {
 
     private static final String DATA_LOCATION = "resources/data/";
+    // player room coordinates
     private int mapX;
     private int mapY;
+    // player coordinates within room
     private int roomX;
     private int roomY;
+    // coordinates of screen
+    private int screenX;
+    private int screenY;
+    private int screenDeltaX;
+    private int screenDeltaY;
     private Zone zone;
     private MapMode mode;
     private int showPlayerDot;
@@ -67,33 +74,53 @@ public class EngineTest extends ui.Game {
                 int sidebarWidth = STATUS_BAR_MAP_WIDTH * MAP_TILE_WIDTH;
                 Dimension windowSize = this.getWindowSize();
 
-                // draw sidebar
-                g.setColor(SIDEBAR_BACKGROUND_COLOR);
+                // draw background
+                g.setColor(Color.GREEN);
                 g.fillRect(0, 0, windowSize.width, windowSize.height);
 
-                // draw map
-                g.setColor(MAP_BACKGROUND_COLOR);
-                g.fillRect(STATUS_BAR_MAP_X_OFFSET, STATUS_BAR_MAP_Y_OFFSET, sidebarWidth,
-                        STATUS_BAR_MAP_HEIGHT * MAP_TILE_HEIGHT);
-                zone.paintFullMap(g, mapX, mapY, STATUS_BAR_MAP_WIDTH, STATUS_BAR_MAP_HEIGHT,
-                        STATUS_BAR_MAP_X_OFFSET, STATUS_BAR_MAP_Y_OFFSET);
-                g.setColor(PLAYER_DOT_COLOR);
-                g.fillRect(STATUS_BAR_MAP_WIDTH/2 * MAP_TILE_WIDTH + 6,
-                        STATUS_BAR_MAP_HEIGHT/2 * MAP_TILE_HEIGHT + 6, 4, 4);
-
                 // draw current block
-                g.setColor(GAME_BACKGROUND_COLOR);
-                g.fillRect(sidebarWidth, 0, windowSize.width - sidebarWidth, windowSize.height);
-                Block currentBlock = zone.getBlock(mapX, mapY);
-                if (currentBlock != null)
-                    currentBlock.drawBlock(g, STATUS_BAR_MAP_WIDTH, 0);
+                drawCurrentBlock(g);
+
+                drawMap(g);
+
+                // draw sidebar
+                g.setColor(SIDEBAR_BACKGROUND_COLOR);
+                g.fillRect(0, STATUS_BAR_MAP_HEIGHT * TILE_Y,
+                        STATUS_BAR_MAP_WIDTH * TILE_X, windowSize.height - STATUS_BAR_MAP_HEIGHT);
 
                 // draw "player"
                 g.setColor(Color.CYAN);
-                g.fillRect(sidebarWidth + roomX + 6, roomY + 6, 4, 4);
+                //g.fillRect(sidebarWidth + roomX + 6, roomY + 6, 4, 4);
+                g.fillRect(zone.getBlockSizeX()/2 * TILE_X + sidebarWidth + 6,
+                        zone.getBlockSizeY()/2 * TILE_Y + 6, 4, 4);
 
                 break;
         }
+    }
+
+    private void drawCurrentBlock(Graphics g) {
+        int sidebarWidth = STATUS_BAR_MAP_WIDTH * MAP_TILE_WIDTH;
+        Dimension windowSize = this.getWindowSize();
+        // draw background
+        g.setColor(GAME_BACKGROUND_COLOR);
+        g.fillRect(sidebarWidth, 0, windowSize.width - sidebarWidth, windowSize.height);
+
+        zone.drawBlockOffset(g, mapX, mapY, zone.getBlockSizeX()/2, zone.getBlockSizeY()/2,
+                sidebarWidth-roomX, -roomY);
+        // draw neighboring blocks
+
+    }
+
+    private void drawMap(Graphics g) {
+        int sidebarWidth = STATUS_BAR_MAP_WIDTH * MAP_TILE_WIDTH;
+        g.setColor(MAP_BACKGROUND_COLOR);
+        g.fillRect(STATUS_BAR_MAP_X_OFFSET, STATUS_BAR_MAP_Y_OFFSET, sidebarWidth,
+                STATUS_BAR_MAP_HEIGHT * MAP_TILE_HEIGHT);
+        zone.paintFullMap(g, mapX, mapY, STATUS_BAR_MAP_WIDTH, STATUS_BAR_MAP_HEIGHT,
+                STATUS_BAR_MAP_X_OFFSET, STATUS_BAR_MAP_Y_OFFSET);
+        g.setColor(PLAYER_DOT_COLOR);
+        g.fillRect(STATUS_BAR_MAP_WIDTH/2 * MAP_TILE_WIDTH + 6,
+                STATUS_BAR_MAP_HEIGHT/2 * MAP_TILE_HEIGHT + 6, 4, 4);
     }
 
     @Override
@@ -118,6 +145,7 @@ public class EngineTest extends ui.Game {
     }
 
     private void movePixels(int x, int y) {
+        // TODO: check scroll lock, update accordingly
         roomX += x;
         roomY += y;
         int w = getBlockPixelWidth();

@@ -98,23 +98,26 @@ public class Block {
 		layers.add(l);
 	}
 	public void paintEditor(Graphics g) {
-		drawBlock(g, 1, 1);
+		drawBlock(g, 1, 1, 0, 0);
 	}
-	public void drawBlock(Graphics g, int i, int j) {
-		// TODO: update for layers
-		// draw tiles
-		for (Layer l : layers) {
-			l.paint(g, i, j);
-		}
-		collisionLayer.paint(g, i, j);
-		// draw entities
-		if (entities != null) {
-			for (int k = 0; k < entities.size(); k++) {
-				Entity next = entities.get(k);
-				next.paint(g, i, j);
-			}
-		}
+	public void drawBlock(Graphics g, int i, int j, int xOffset, int yOffset) {
+        // TODO: update for layers
+        // draw tiles
+        for (Layer l : layers) {
+            l.paint(g, i, j, xOffset, yOffset);
+        }
+        collisionLayer.paint(g, i, j, xOffset, yOffset);
+        // draw entities
+        if (entities != null) {
+            for (int k = 0; k < entities.size(); k++) {
+                Entity next = entities.get(k);
+                next.paint(g, i, j);
+            }
+        }
 	}
+    public void paintBlockOffset(Graphics g, int pixelOffsetX, int pixelOffsetY) {
+
+    }
 
 	public void paintMapIcon(Graphics g, Color[] doorColors, int x, int y, int width,
 			int height) {
