@@ -14,6 +14,8 @@ public class EngineTest extends ui.Game {
     private static final String DATA_LOCATION = "resources/data/";
     private int mapX;
     private int mapY;
+    private int roomX;
+    private int roomY;
     private Zone zone;
     private MapMode mode;
     private int showPlayerDot;
@@ -45,6 +47,8 @@ public class EngineTest extends ui.Game {
         Block.loadTilesets();
         mapX = zone.getStartingX();
         mapY = zone.getStartingY();
+        roomX = 32;
+        roomY = 32;
         mode = MapMode.values()[0];
     }
 
@@ -83,6 +87,11 @@ public class EngineTest extends ui.Game {
                 Block currentBlock = zone.getBlock(mapX, mapY);
                 if (currentBlock != null)
                     currentBlock.drawBlock(g, STATUS_BAR_MAP_WIDTH, 0);
+
+                // draw "player"
+                g.setColor(Color.CYAN);
+                g.fillRect(sidebarWidth + roomX + 6, roomY + 6, 4, 4);
+
                 break;
         }
     }
@@ -97,10 +106,10 @@ public class EngineTest extends ui.Game {
     public void input(Input type, boolean pressed) {
         if (pressed) {
             switch (type) {
-                case LEFT: if (mapX > 0) mapX--; break;
-                case RIGHT: if (mapX < zone.getWidth()-1) mapX++; break;
-                case UP: if (mapY > 0) mapY--; break;
-                case DOWN: if (mapY < zone.getHeight()-1) mapY++; break;
+                case LEFT: movePixels(-16, 0); break;
+                case RIGHT: movePixels(16, 0); break;
+                case UP: movePixels(0, -16); break;
+                case DOWN: movePixels(0, 16); break;
                 case DEBUG:
                 case JUMP: mode = MapMode.values()[(mode.ordinal()+1) % MapMode.values().length];
                     break;
@@ -108,11 +117,64 @@ public class EngineTest extends ui.Game {
         }
     }
 
+    private void movePixels(int x, int y) {
+        roomX += x;
+        roomY += y;
+        int w = getBlockPixelWidth();
+        int h = getBlockPixelHeight();
+        if (roomX < 0) {
+            // moving off left edge
+            if (mapX > 0) {
+                roomX += w;
+                mapX -= 1;
+            }
+            else {
+                roomX = 0;
+            }
+        }
+        else if (roomX > w-1) {
+            // moving off right edge
+            if (mapX < zone.getWidth()-1) {
+                roomX -= w;
+                mapX += 1;
+            }
+            else {
+                roomX = w - TILE_X;
+            }
+        }
+
+        if (roomY < 0) {
+            // moving off top edge
+            if (mapY > 0) {
+                roomY += h;
+                mapY -= 1;
+            }
+            else {
+                roomY = 0;
+            }
+        }
+        else if (roomY > h-1) {
+            // moving off bottom edge
+            if (mapY < zone.getHeight()-1) {
+                roomY -= h;
+                mapY += 1;
+            }
+            else {
+                roomY = h - TILE_Y;
+            }
+        }
+    }
+
     @Override
     public Dimension getWindowSize() {
-        //return new Dimension(zone.getWidth()*MAP_TILE_WIDTH, zone.getHeight()*MAP_TILE_HEIGHT);
         return new Dimension((STATUS_BAR_MAP_WIDTH + zone.getBlockSizeX())*TILE_X, zone.getBlockSizeY() *TILE_Y);
     }
     @Override
     public String getWindowTitle() { return "Engine Test"; }
+    private int getBlockPixelWidth() {
+        return zone.getBlockSizeX() * TILE_X;
+    }
+    private int getBlockPixelHeight() {
+        return zone.getBlockSizeY() * TILE_Y;
+    }
 }
