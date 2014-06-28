@@ -17,6 +17,8 @@ public class EngineTest extends ui.Game {
     // player global coordinates
     private int playerX;
     private int playerY;
+    private int mapX;
+    private int mapY;
     // screen global coordinates
     // TODO
     private int screenX;
@@ -40,8 +42,9 @@ public class EngineTest extends ui.Game {
     private static final Color MAP_BACKGROUND_COLOR = Color.BLUE;
     private static final Color SIDEBAR_BACKGROUND_COLOR = Color.BLACK;
     private static final Color GAME_BACKGROUND_COLOR = Color.GRAY;
-    int delta = 16;
+    int delta = 1;
     private boolean[] scrollLocks = new boolean[4]; // up, down, left, right
+    private boolean[] inputs = new boolean[Input.values().length];
 
     public EngineTest(String stageName) {
         String stageLoc = DATA_LOCATION + stageName;
@@ -53,6 +56,7 @@ public class EngineTest extends ui.Game {
         Block.loadTilesets();
         playerX = zone.getStartingX() * zone.getBlockSizeX();
         playerY = zone.getStartingY() * zone.getBlockSizeY();
+        this.updateMapCoordinates();
     }
 
     @Override
@@ -71,7 +75,12 @@ public class EngineTest extends ui.Game {
         // draw sidebar
         g.setColor(SIDEBAR_BACKGROUND_COLOR);
         g.fillRect(0, STATUS_BAR_MAP_HEIGHT * TILE_Y,
-                STATUS_BAR_MAP_WIDTH * TILE_X, windowSize.height - STATUS_BAR_MAP_HEIGHT);
+                STATUS_BAR_MAP_WIDTH * TILE_X, windowSize.height - STATUS_BAR_MAP_HEIGHT * TILE_Y);
+        for (int i = 0; i < scrollLocks.length; i++) {
+            boolean b = scrollLocks[i];
+            g.setColor(b ? Color.RED : Color.GREEN);
+            g.fillRect(0, STATUS_BAR_MAP_HEIGHT * TILE_Y + i * TILE_Y, TILE_X, TILE_Y);
+        }
 
         // draw "player"
         drawPlayer(g);
@@ -189,6 +198,10 @@ public class EngineTest extends ui.Game {
     @Override
     public void advanceAnimations() {
         showPlayerDot = showPlayerDot>60 ? 0: showPlayerDot+1;
+        if (inputs[Input.LEFT.ordinal()]) movePixels(-delta, 0);
+        if (inputs[Input.RIGHT.ordinal()]) movePixels(delta, 0);
+        if (inputs[Input.UP.ordinal()]) movePixels(0, -delta);
+        if (inputs[Input.DOWN.ordinal()]) movePixels(0, delta);
         // update player position
         if (playerDeltaX > 0) {
             playerX++;
@@ -223,16 +236,26 @@ public class EngineTest extends ui.Game {
             screenY--;
             screenDeltaY++;
         }
+        if (mapX != this.getPlayerMapX() || mapY != this.getPlayerMapY()) {
+            updateMapCoordinates();
+        }
+    }
+
+    private void updateMapCoordinates() {
+        this.mapX = this.getPlayerMapX();
+        this.mapY = this.getPlayerMapY();
+        Block newBlock = zone.getBlock(mapX, mapY);
+        if (newBlock != null)
+            this.scrollLocks = newBlock.getScrollLocking();
+        else
+            this.scrollLocks = new boolean[4];
     }
 
     @Override
     public void input(Input type, boolean pressed) {
+        inputs[type.ordinal()] = pressed;
         if (pressed) {
             switch (type) {
-                case LEFT: movePixels(-delta, 0); break;
-                case RIGHT: movePixels(delta, 0); break;
-                case UP: movePixels(0, -delta); break;
-                case DOWN: movePixels(0, delta); break;
                 case DEBUG:
                     //delta = Math.max( delta/2, 1);
                     toggleCameraLock();

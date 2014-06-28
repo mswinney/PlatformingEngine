@@ -167,6 +167,9 @@ public class Block {
 		b[3] = (scrollByte & 0x1) > 0;
 		return b;
 	}
+    public boolean[] getScrollLocking() {
+        return Block.getScrollLocking(this.getScrollByte());
+    }
 
 	public void saveData(RandomAccessFile file) throws IOException {
 		// write header
