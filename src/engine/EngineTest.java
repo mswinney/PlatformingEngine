@@ -20,11 +20,9 @@ public class EngineTest extends ui.Game {
     private int mapX;
     private int mapY;
     // screen global coordinates
-    // TODO
     private int screenX;
     private int screenY;
     // amount of change remaining to bleed into screen coordinates
-    // TODO implement
     private int playerDeltaX;
     private int playerDeltaY;
     private int screenDeltaX;
@@ -250,6 +248,7 @@ public class EngineTest extends ui.Game {
     }
 
     private void updateMapCoordinates() {
+        updateCamera(this.mapX, this.mapY, this.getPlayerMapX(), this.getPlayerMapY());
         this.mapX = this.getPlayerMapX();
         this.mapY = this.getPlayerMapY();
         Block newBlock = zone.getBlock(mapX, mapY);
@@ -257,6 +256,16 @@ public class EngineTest extends ui.Game {
             this.scrollLocks = newBlock.getScrollLocking();
         else
             this.scrollLocks = new boolean[4];
+    }
+
+    private void updateCamera(int oldMapX, int oldMapY, int newMapX, int newMapY) {
+        System.out.printf("(%d, %d) to (%d, %d)\n", oldMapX, oldMapY, newMapX, newMapY);
+        if (isCameraLockedTransition(oldMapX, oldMapY, newMapX, newMapY)) {
+            System.out.println("Scroll camera across");
+        }
+    }
+    private boolean isCameraLockedTransition(int oldMapX, int oldMapY, int newMapX, int newMapY) {
+        return true;
     }
 
     @Override
@@ -280,7 +289,7 @@ public class EngineTest extends ui.Game {
         }
     }
 
-    // returns maximum number of pixels that the screen can move, in the upward direction
+    // returns maximum number of pixels that the screen can move in each direction
     private int screenCanMoveUp(int distance) {
         if (!scrollLocks[0]) {
             // scrolling isn't locked; immediately return full distance
@@ -296,23 +305,47 @@ public class EngineTest extends ui.Game {
             return distance;
         }
         else {
-            System.out.println(screenY + " " + distance);
-            return ZettaUtil.clamp(distance, 0, TILE_Y * zone.getBlockSizeY() - (getScreenRoomY() + SCREEN_BUFFER_SIZE_Y));
+            return ZettaUtil.clamp(distance, 0,
+                    TILE_Y * zone.getBlockSizeY() - (this.getScreenRoomY() + SCREEN_BUFFER_SIZE_Y));
+        }
+    }
+    private int screenCanMoveLeft(int distance) {
+        if (!scrollLocks[1]) {
+            // scrolling isn't locked; immediately return full distance
+            return distance;
+        }
+        else {
+            return ZettaUtil.clamp(distance, -(screenX - SCREEN_BUFFER_SIZE_X), 0);
+        }
+    }
+    private int screenCanMoveRight(int distance) {
+        if (!scrollLocks[3]) {
+            // scrolling isn't locked; immediately return full distance
+            return distance;
+        }
+        else {
+            return ZettaUtil.clamp(distance, 0,
+                    TILE_X * zone.getBlockSizeX() - (this.getScreenRoomX() + SCREEN_BUFFER_SIZE_X));
         }
     }
 
     private void movePixels(int x, int y) {
-        // TODO: check scroll lock, update accordingly
+        // TODO: collision detection
         // set up amount of delta if moving onto a locked axis
         playerDeltaX += x;
         playerDeltaY += y;
+        if (screenDeltaX + x < 0) {
+            screenDeltaX = screenCanMoveLeft(screenDeltaX + x);
+        }
+        else if (screenDeltaX + x > 0) {
+            screenDeltaX = screenCanMoveRight(screenDeltaX + x);
+        }
         if (screenDeltaY + y < 0) {
             screenDeltaY = screenCanMoveUp(screenDeltaY + y);
         }
         else if (screenDeltaY + y > 0) {
             screenDeltaY = screenCanMoveDown(screenDeltaY + y);
         }
-        screenDeltaX += x;
     }
 
     @Override
