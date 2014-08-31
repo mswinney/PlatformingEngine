@@ -225,11 +225,13 @@ public class EngineTest extends ui.Game {
         }
         // update screen position
         if (screenDeltaX > 0) {
-            screenX++;
+            if (screenX < playerX)
+                screenX++;
             screenDeltaX--;
         }
         else if (screenDeltaX < 0) {
-            screenX--;
+            if (screenX > playerX)
+                screenX--;
             screenDeltaX++;
         }
         if (screenDeltaY > 0) {
@@ -272,7 +274,7 @@ public class EngineTest extends ui.Game {
                             "\tY: " + this.getPlayerMapY() + ":" + this.getPlayerRoomY() +
                             "\t\t Screen X: " + this.getScreenMapX() + ":" + this.getScreenRoomX() +
                             "\t Screen Y: " + this.getScreenMapY() + ":" + this.getScreenRoomY());
-                    System.out.println(scrollLocks[0]);
+                    System.out.println(TILE_Y * zone.getBlockSizeY() + "-" + (this.getScreenRoomY() + SCREEN_BUFFER_SIZE_Y));
                     break;
             }
         }
@@ -285,7 +287,6 @@ public class EngineTest extends ui.Game {
             return distance;
         }
         else {
-            System.out.println(screenY);
             return ZettaUtil.clamp(distance, -(screenY - SCREEN_BUFFER_SIZE_Y), 0);
         }
     }
@@ -295,8 +296,8 @@ public class EngineTest extends ui.Game {
             return distance;
         }
         else {
-            System.out.println(screenY);
-            return ZettaUtil.clamp(distance, 0, TILE_Y * zone.getBlockSizeY() - (screenY + SCREEN_BUFFER_SIZE_Y));
+            System.out.println(screenY + " " + distance);
+            return ZettaUtil.clamp(distance, 0, TILE_Y * zone.getBlockSizeY() - (getScreenRoomY() + SCREEN_BUFFER_SIZE_Y));
         }
     }
 
