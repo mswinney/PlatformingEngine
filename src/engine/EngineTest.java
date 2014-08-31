@@ -38,12 +38,14 @@ public class EngineTest extends ui.Game {
     private static final int STATUS_BAR_MAP_X_OFFSET = 0;
     private static final int STATUS_BAR_MAP_Y_OFFSET = 0;
     private static final int SIDEBAR_WIDTH = STATUS_BAR_MAP_WIDTH * MAP_TILE_WIDTH;
+    private static int SCREEN_BUFFER_SIZE_X;
+    private static int SCREEN_BUFFER_SIZE_Y;
     private static final Color PLAYER_DOT_COLOR = new Color(128, 128, 128, 200);
     private static final Color MAP_BACKGROUND_COLOR = Color.BLUE;
     private static final Color SIDEBAR_BACKGROUND_COLOR = Color.BLACK;
     private static final Color GAME_BACKGROUND_COLOR = Color.GRAY;
     int delta = 1;
-    private boolean[] scrollLocks = new boolean[4]; // up, down, left, right
+    private boolean[] scrollLocks = new boolean[4]; // top, left, bottom, right
     private boolean[] inputs = new boolean[Input.values().length];
 
     public EngineTest(String stageName) {
@@ -56,6 +58,8 @@ public class EngineTest extends ui.Game {
         Block.loadTilesets();
         playerX = zone.getStartingX() * zone.getBlockSizeX();
         playerY = zone.getStartingY() * zone.getBlockSizeY();
+        SCREEN_BUFFER_SIZE_X = TILE_X * zone.getBlockSizeX() / 2;
+        SCREEN_BUFFER_SIZE_Y = TILE_Y * zone.getBlockSizeY() / 2;
         this.updateMapCoordinates();
     }
 
@@ -229,11 +233,13 @@ public class EngineTest extends ui.Game {
             screenDeltaX++;
         }
         if (screenDeltaY > 0) {
-            screenY++;
+            if (screenY < playerY)
+                screenY++;
             screenDeltaY--;
         }
         else if (screenDeltaY < 0) {
-            screenY--;
+            if (screenY > playerY)
+                screenY--;
             screenDeltaY++;
         }
         if (mapX != this.getPlayerMapX() || mapY != this.getPlayerMapY()) {
@@ -266,8 +272,31 @@ public class EngineTest extends ui.Game {
                             "\tY: " + this.getPlayerMapY() + ":" + this.getPlayerRoomY() +
                             "\t\t Screen X: " + this.getScreenMapX() + ":" + this.getScreenRoomX() +
                             "\t Screen Y: " + this.getScreenMapY() + ":" + this.getScreenRoomY());
+                    System.out.println(scrollLocks[0]);
                     break;
             }
+        }
+    }
+
+    // returns maximum number of pixels that the screen can move, in the upward direction
+    private int screenCanMoveUp(int distance) {
+        if (!scrollLocks[0]) {
+            // scrolling isn't locked; immediately return full distance
+            return distance;
+        }
+        else {
+            System.out.println(screenY);
+            return ZettaUtil.clamp(distance, -(screenY - SCREEN_BUFFER_SIZE_Y), 0);
+        }
+    }
+    private int screenCanMoveDown(int distance) {
+        if (!scrollLocks[2]) {
+            // scrolling isn't locked; immediately return full distance
+            return distance;
+        }
+        else {
+            System.out.println(screenY);
+            return ZettaUtil.clamp(distance, 0, TILE_Y * zone.getBlockSizeY() - (screenY + SCREEN_BUFFER_SIZE_Y));
         }
     }
 
@@ -276,8 +305,13 @@ public class EngineTest extends ui.Game {
         // set up amount of delta if moving onto a locked axis
         playerDeltaX += x;
         playerDeltaY += y;
+        if (screenDeltaY + y < 0) {
+            screenDeltaY = screenCanMoveUp(screenDeltaY + y);
+        }
+        else if (screenDeltaY + y > 0) {
+            screenDeltaY = screenCanMoveDown(screenDeltaY + y);
+        }
         screenDeltaX += x;
-        screenDeltaY += y;
     }
 
     @Override
