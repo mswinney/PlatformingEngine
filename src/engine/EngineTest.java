@@ -262,14 +262,16 @@ public class EngineTest extends ui.Game {
         scrollAcrossLockedCameraBoundary(oldMapX, oldMapY, newMapX, newMapY);
         if (getPlayerMapX() != getScreenMapX() || getPlayerMapY() != getScreenMapY()) {
             System.out.println("Warning: Camera desynced from player");
+            screenX = playerX;
+            screenY = playerY;
         }
     }
     private void scrollAcrossLockedCameraBoundary(int oldMapX, int oldMapY, int newMapX, int newMapY) {
-        if (zone.getBlock(oldMapX, oldMapY) == null || zone.getBlock(newMapX, newMapY) == null) {
-            return;
-        }
-        boolean[] oldLocks = zone.getBlock(oldMapX, oldMapY).getScrollLocking();
-        boolean[] newLocks = zone.getBlock(newMapX, newMapY).getScrollLocking();
+        Block oldBlock = zone.getBlock(oldMapX, oldMapY);
+        Block newBlock = zone.getBlock(newMapX, newMapY);
+        boolean[] oldLocks = oldBlock == null ? new boolean[4] : oldBlock.getScrollLocking();
+        boolean[] newLocks = newBlock == null ? new boolean[4] : newBlock.getScrollLocking();
+
         if (oldMapX - 1 == newMapX && oldLocks[1]) {
             // scroll left
             System.out.println("Scroll left");
