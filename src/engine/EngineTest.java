@@ -260,12 +260,30 @@ public class EngineTest extends ui.Game {
 
     private void updateCamera(int oldMapX, int oldMapY, int newMapX, int newMapY) {
         System.out.printf("(%d, %d) to (%d, %d)\n", oldMapX, oldMapY, newMapX, newMapY);
-        if (isCameraLockedTransition(oldMapX, oldMapY, newMapX, newMapY)) {
-            System.out.println("Scroll camera across");
-        }
+        isCameraLockedTransition(oldMapX, oldMapY, newMapX, newMapY);
     }
-    private boolean isCameraLockedTransition(int oldMapX, int oldMapY, int newMapX, int newMapY) {
-        return true;
+    private void isCameraLockedTransition(int oldMapX, int oldMapY, int newMapX, int newMapY) {
+        boolean[] oldLocks = zone.getBlock(oldMapX, oldMapY).getScrollLocking();
+        if (oldMapX - 1 == newMapX && oldLocks[1]) {
+            // scroll left
+            System.out.println("Scroll left");
+            screenX -= TILE_X * zone.getBlockSizeX();
+        }
+        else if (oldMapX + 1 == newMapX && oldLocks[3]) {
+            // scroll right
+            System.out.println("Scroll right");
+            screenX += TILE_X * zone.getBlockSizeX();
+        }
+        else if (oldMapY - 1 == newMapY && oldLocks[0]) {
+            // scroll up
+            System.out.println("Scroll up");
+            screenY -= TILE_Y * zone.getBlockSizeY();
+        }
+        else if (oldMapY + 1 == newMapY && oldLocks[2]) {
+            // scroll down
+            System.out.println("Scroll down");
+            screenY += TILE_Y * zone.getBlockSizeY();
+        }
     }
 
     @Override
@@ -283,7 +301,6 @@ public class EngineTest extends ui.Game {
                             "\tY: " + this.getPlayerMapY() + ":" + this.getPlayerRoomY() +
                             "\t\t Screen X: " + this.getScreenMapX() + ":" + this.getScreenRoomX() +
                             "\t Screen Y: " + this.getScreenMapY() + ":" + this.getScreenRoomY());
-                    System.out.println(TILE_Y * zone.getBlockSizeY() + "-" + (this.getScreenRoomY() + SCREEN_BUFFER_SIZE_Y));
                     break;
             }
         }
@@ -296,7 +313,7 @@ public class EngineTest extends ui.Game {
             return distance;
         }
         else {
-            return ZettaUtil.clamp(distance, -(screenY - SCREEN_BUFFER_SIZE_Y), 0);
+            return ZettaUtil.clamp(distance, -(this.getScreenRoomY() - SCREEN_BUFFER_SIZE_Y), 0);
         }
     }
     private int screenCanMoveDown(int distance) {
@@ -315,7 +332,7 @@ public class EngineTest extends ui.Game {
             return distance;
         }
         else {
-            return ZettaUtil.clamp(distance, -(screenX - SCREEN_BUFFER_SIZE_X), 0);
+            return ZettaUtil.clamp(distance, -(this.getScreenRoomX() - SCREEN_BUFFER_SIZE_X), 0);
         }
     }
     private int screenCanMoveRight(int distance) {
