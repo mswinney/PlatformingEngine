@@ -9,7 +9,6 @@ import leveldata.Block;
 import leveldata.ZettaUtil;
 import leveldata.Zone;
 import ui.Controls.Input;
-import ui.Game;
 
 public class EngineTest extends ui.Game {
 
@@ -260,29 +259,60 @@ public class EngineTest extends ui.Game {
 
     private void updateCamera(int oldMapX, int oldMapY, int newMapX, int newMapY) {
         System.out.printf("(%d, %d) to (%d, %d)\n", oldMapX, oldMapY, newMapX, newMapY);
-        isCameraLockedTransition(oldMapX, oldMapY, newMapX, newMapY);
+        scrollAcrossLockedCameraBoundary(oldMapX, oldMapY, newMapX, newMapY);
+        if (getPlayerMapX() != getScreenMapX() || getPlayerMapY() != getScreenMapY()) {
+            System.out.println("Warning: Camera desynced from player");
+        }
     }
-    private void isCameraLockedTransition(int oldMapX, int oldMapY, int newMapX, int newMapY) {
+    private void scrollAcrossLockedCameraBoundary(int oldMapX, int oldMapY, int newMapX, int newMapY) {
+        if (zone.getBlock(oldMapX, oldMapY) == null || zone.getBlock(newMapX, newMapY) == null) {
+            return;
+        }
         boolean[] oldLocks = zone.getBlock(oldMapX, oldMapY).getScrollLocking();
+        boolean[] newLocks = zone.getBlock(newMapX, newMapY).getScrollLocking();
         if (oldMapX - 1 == newMapX && oldLocks[1]) {
             // scroll left
             System.out.println("Scroll left");
             screenX -= TILE_X * zone.getBlockSizeX();
+            resetScreenVerticalOffset(newLocks[0], newLocks[2]);
         }
         else if (oldMapX + 1 == newMapX && oldLocks[3]) {
             // scroll right
             System.out.println("Scroll right");
             screenX += TILE_X * zone.getBlockSizeX();
+            resetScreenVerticalOffset(newLocks[0], newLocks[2]);
         }
         else if (oldMapY - 1 == newMapY && oldLocks[0]) {
             // scroll up
             System.out.println("Scroll up");
             screenY -= TILE_Y * zone.getBlockSizeY();
+            resetScreenHorizontalOffset(newLocks[1], newLocks[3]);
         }
         else if (oldMapY + 1 == newMapY && oldLocks[2]) {
             // scroll down
             System.out.println("Scroll down");
             screenY += TILE_Y * zone.getBlockSizeY();
+            resetScreenHorizontalOffset(newLocks[1], newLocks[3]);
+        }
+    }
+    private void resetScreenHorizontalOffset(boolean leftLock, boolean rightLock) {
+        if (screenX > playerX && !leftLock) {
+            System.out.println("Catch up left by " + (screenX - playerX) + " pixels");
+            screenX -= screenX - playerX;
+        }
+        else if (screenX < playerX && !rightLock) {
+            System.out.println("Catch up right by " + (playerX - screenX) + " pixels");
+            screenX += playerX - screenX;
+        }
+    }
+    private void resetScreenVerticalOffset(boolean topLock, boolean bottomLock) {
+        if (screenY > playerY && !topLock) {
+            System.out.println("Catch up top by " + (screenY - playerY) + " pixels");
+            screenY -= screenY - playerY;
+        }
+        else if (screenY < playerY && !bottomLock) {
+            System.out.println("Catch up bottom by " + (playerY - screenY) + " pixels");
+            screenY += playerY - screenY;
         }
     }
 
@@ -301,6 +331,8 @@ public class EngineTest extends ui.Game {
                             "\tY: " + this.getPlayerMapY() + ":" + this.getPlayerRoomY() +
                             "\t\t Screen X: " + this.getScreenMapX() + ":" + this.getScreenRoomX() +
                             "\t Screen Y: " + this.getScreenMapY() + ":" + this.getScreenRoomY());
+                    System.out.printf("%b %b %b %b\n", screenCanMoveUp(1) > 0, screenCanMoveLeft(1) > 0,
+                            screenCanMoveDown(1) > 0, screenCanMoveRight(1) > 0);
                     break;
             }
         }
